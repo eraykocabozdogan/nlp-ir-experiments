@@ -1,32 +1,35 @@
-# CENG 543 Information Retrieval - Midterm Project
+# NLP & IR Experiments: from RNNs to RAG
 
-**Student Name: Eray Kocabozdoğan
-**Student ID: 280201055
+Five controlled experiments that trace the path from recurrent models to
+retrieval-augmented generation, implemented in PyTorch and Hugging Face. Each one has
+a notebook with saved outputs and is written up in the accompanying
+[8-page report](Latex.pdf).
 
-This repository contains the solutions for the CENG 543 Information Retrieval Take-Home Midterm Examination.
+> Originally done for CENG543 Information Retrieval (IZTECH, Fall 2025).
 
-## Project Structure
+## Experiments and results
 
-* `Ceng543_Q1.ipynb`: Question 1 - Comparative Analysis of BiLSTM/BiGRU with GloVe/BERT.
-* `Ceng543_Q2.ipynb`: Question 2 - Implementation of Bahdanau, Luong, and Dot-Product Attention.
-* `Ceng543_Q3.ipynb`: Question 3 - Transformer vs Seq2Seq models & Ablation Study.
-* `Ceng543_Q4.ipynb`: Question 4 - Retrieval-Augmented Generation (RAG) system using BM25 & FLAN-T5.
-* `Ceng543_Q5.ipynb`: Question 5 - Interpretability analysis and failure cases.
-* `requirements.txt`: List of dependencies required to run the notebooks.
+| # | Experiment | Data | Key result |
+|---|---|---|---|
+| 1 | BiLSTM / BiGRU × static (GloVe) vs contextual (DistilBERT) embeddings | SST-2 | Contextual embeddings: 0.839 → **0.885** accuracy (BiLSTM). t-SNE shows clearer class separation |
+| 2 | Additive (Bahdanau), multiplicative (Luong) and dot-product attention in Seq2Seq | Multi30k | Additive attention is best (BLEU **21.98**, ROUGE-L 0.533). Alignment maps included |
+| 3 | Transformer vs Seq2Seq, with a layer/head ablation | Multi30k | 3 layers × 4 heads gives BLEU **25.14** vs 21.88 for the base model. 1 layer drops to 13.87 |
+| 4 | RAG with BM25 retrieval + FLAN-T5 generation | SQuAD | Recall@1 0.515, BLEU 0.228, ROUGE-L 0.452, BERTScore **0.753**. Includes a hallucination vs faithfulness analysis |
+| 5 | Interpretability and error analysis of the Transformer from #3 | Multi30k | Per-token prediction entropy highlights uncertain tokens; sentence-level BLEU separates success and failure cases |
 
-## How to Run
+## Layout
 
-All notebooks are developed and tested on **Google Colab** using a T4 GPU.
+```
+Notebook/   Ceng543_q1–q5.ipynb   one notebook per experiment, outputs saved
+Outputs/    figures and CSVs (convergence, t-SNE, attention maps, ablation)
+Latex.pdf   full report
+```
 
-1.  Clone the repository.
-2.  Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-3.  Open the notebooks in Jupyter or upload them to Google Colab.
-4.  Ensure you have the necessary API tokens (e.g., Hugging Face) if required for downloading models.
+## Run
 
-## Notes
-* The results, plots, and metrics are pre-executed and visible in the notebooks.
+Developed on Google Colab with a T4 GPU.
 
-Github link: https://github.com/eraykocabozdogan/Ceng543_Take_Home_Midterm.git
+```bash
+pip install -r requirements.txt   # or: conda env create -f environment.yml
+jupyter notebook Notebook/
+```
